@@ -2,10 +2,10 @@ import {
   GoogleMap,
   MarkerF,
   useJsApiLoader,
-  InfoWindowF,
   InfoBox,
+  OverlayViewF,
+  OverlayView
 } from "@react-google-maps/api";
-import { InfoWindow } from "@react-google-maps/api";
 import { info } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import "./Map.module.css";
@@ -13,6 +13,7 @@ import shadowBox from "./shadowBox_20x22.png";
 import starfish from "./starfish.png";
 import star from "./starfish40.png";
 import { useExploreStore, Position } from "../../store/store";
+import GameConfig from "../../game-config.json";
 
 const containerStyle = {
   width: "100%",
@@ -27,6 +28,11 @@ type InfoWindowData = {
   id: number;
   address: string;
 };
+
+const getPixelPositionOffset = (width: number, height: number) => ({
+  x: -(width / 2),
+  y: -(height / 2),
+})
 
 export function Map() {
   const { isLoaded } = useJsApiLoader({
@@ -84,6 +90,7 @@ export function Map() {
   const setCurrentLevel = useExploreStore((state) => state.setCurrentLevel);
   const isMapEnabled = useExploreStore((state) => state.isMapEnabled);
   const setIsMapEnabled = useExploreStore((state) => state.setIsMapEnabled);
+  const currentLevelPosition = GameConfig.levels[currentLevel].marker.pos;
   const nextLevel = () => {
     setCurrentLevel(currentLevel + 1);
   };
@@ -95,12 +102,13 @@ export function Map() {
       } as Position);
       // setIsMapEnabled(true);
     });
+    setIsMapEnabled(true);
   });
   if (!isMapEnabled) return null;
   return !isLoaded ? (
     <h1>Loading...</h1>
   ) : (
-    <>
+    <div style={{ height: "100vh", width: "100vw" }}>
       {/* <div id="overlay">
         <div id="modal">
             <span id="close-btn">&times;</span>
@@ -131,38 +139,19 @@ export function Map() {
             url: star,
           }}
         />
-        {/* <InfoBox
-          position={new google.maps.LatLng(mapPos.lat, mapPos.lng)}
-          boxClass={"info-box"}
+        <OverlayViewF
+        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        position={mapPos} 
+        getPixelPositionOffset={getPixelPositionOffset}
         >
-          <div className="info-box">hello angel and welcome</div>
-        </InfoBox> */}
+                <div style={{ background: `white`, border: `1px solid #ccc`, padding: 15 }}>
+        <h1>OverlayView</h1>
+        <button onClick={()=> {console.log("clickkkkedd")}} style={{ height: 60 }}>
+          button text
+        </button>
+      </div>
+        </OverlayViewF>
       </GoogleMap>
-    </>
+    </div>
   );
 }
-
-// {/* {markers.map(({ address, lat, lng }, ind) => (
-//   <div key={ind}>
-//   <MarkerF
-//     position={{ lat, lng }}
-//     icon = {{
-//       url: shadowBox,
-//       labelOrigin: new google.maps.Point(10, -10),
-//     }}
-//     label = {{text:address, color:"white"}}
-//     onClick={() => {
-//       handleMarkerClick(ind, {id : ind, address, lat, lng});
-//     }}
-//   >
-//   </MarkerF>
-//   </div>
-// ))} */}
-// {/* <InfoBox
-//   position={{ lat: 35.31555195658608, lng: -120.65380604662631 }}
-//   content={"hello world"}
-//   ></InfoBox> */}
-
-// {/* <MarkerF position={{ lat: 35.31555195658608, lng: -120.65380604662631 }}
-// icon={shadowBox}
-//  /> */}

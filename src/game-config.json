@@ -1,0 +1,11 @@
+{
+    "levels": [
+        {
+            "marker": {
+                "address": "Architecture Graveyeard",
+                "pos": { "lat": 35.31555195658608, "lng": -120.65380604662631 }
+            },
+            "messages": {"arch-1": false, "arch-2": false, "arch-3": false}
+        }
+    ]
+}
