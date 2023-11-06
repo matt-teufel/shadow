@@ -27,7 +27,7 @@ const messageStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "80vw",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -113,6 +113,7 @@ export function Map() {
   const nextLevel = () => {
     setCurrentLevel(currentLevel + 1);
   };
+  // ToDo probably poll this and make there be mutliple hits for truthy
   useEffect(() => {
     navigator.geolocation.watchPosition(async (pos) => {
       const newPos = {
