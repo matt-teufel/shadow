@@ -4,7 +4,7 @@ import {
   useJsApiLoader,
   InfoBox,
   OverlayViewF,
-  OverlayView
+  OverlayView,
 } from "@react-google-maps/api";
 import { info } from "console";
 import React, { useEffect, useMemo, useState } from "react";
@@ -14,11 +14,26 @@ import starfish from "./starfish.png";
 import star from "./starfish40.png";
 import { useExploreStore, Position } from "../../store/store";
 import GameConfig from "../../game-config.json";
+import { Box, Typography, Button } from "@mui/material";
+import { arePositionsWithin50Meters } from "./Map-Utils";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
+
+const messageStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 type MarkerProps = {
   pos: Position;
   address: string;
@@ -32,7 +47,7 @@ type InfoWindowData = {
 const getPixelPositionOffset = (width: number, height: number) => ({
   x: -(width / 2),
   y: -(height / 2),
-})
+});
 
 export function Map() {
   const { isLoaded } = useJsApiLoader({
@@ -62,7 +77,7 @@ export function Map() {
   const markers: MarkerProps[] = [
     {
       address: "Architecture Graveyard",
-      pos: { lat: 35.31555195658608, lng: -120.65380604662631 },
+      pos: { lat: 35.1448, lng: -120.641391 },
     },
     {
       address: "Architecture Graveyard",
@@ -83,28 +98,35 @@ export function Map() {
   //   setInfoWindowData({ id:ind, address });
   //   setIsOpen(true);
   // };
-
+  const [locationLoaded, setLocationLoaded] = useState(false);
   const mapPos = useExploreStore((state) => state.mapPos);
   const setMapPosition = useExploreStore((state) => state.setMapPosition);
   const currentLevel = useExploreStore((state) => state.currentLevel);
   const setCurrentLevel = useExploreStore((state) => state.setCurrentLevel);
   const isMapEnabled = useExploreStore((state) => state.isMapEnabled);
   const setIsMapEnabled = useExploreStore((state) => state.setIsMapEnabled);
+  const setIsScannerEnabled = useExploreStore(
+    (state) => state.setIsScannerEnabled
+  );
   const currentLevelPosition = GameConfig.levels[currentLevel].marker.pos;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const nextLevel = () => {
     setCurrentLevel(currentLevel + 1);
   };
   useEffect(() => {
     navigator.geolocation.watchPosition(async (pos) => {
-      setMapPosition({
+      const newPos = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
-      } as Position);
-      // setIsMapEnabled(true);
+      } as Position;
+      setMapPosition(newPos);
+      setLocationLoaded(true);
+      if (arePositionsWithin50Meters(newPos, mapPos)) {
+        setIsModalOpen(true);
+      }
     });
-    setIsMapEnabled(true);
   });
-  if (!isMapEnabled) return null;
+  if (!isMapEnabled || !locationLoaded) return null;
   return !isLoaded ? (
     <h1>Loading...</h1>
   ) : (
@@ -120,8 +142,7 @@ export function Map() {
         mapContainerStyle={containerStyle}
         center={mapPos}
         zoom={15}
-        options={mapOptions}
-      >
+        options={mapOptions}>
         <MarkerF
           position={markers[currentLevel].pos}
           icon={{
@@ -139,18 +160,30 @@ export function Map() {
             url: star,
           }}
         />
-        <OverlayViewF
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-        position={mapPos} 
-        getPixelPositionOffset={getPixelPositionOffset}
-        >
-                <div style={{ background: `white`, border: `1px solid #ccc`, padding: 15 }}>
-        <h1>OverlayView</h1>
-        <button onClick={()=> {console.log("clickkkkedd")}} style={{ height: 60 }}>
-          button text
-        </button>
-      </div>
-        </OverlayViewF>
+        {isModalOpen && (
+          <OverlayView
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            position={mapPos}
+            getPixelPositionOffset={getPixelPositionOffset}>
+            <Box sx={messageStyle}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Welcome to Architecture Graveyard
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
+                I've hidden three QR codes throughout the area. Search high,
+                low, and every where in between to unlcok your next location
+              </Typography>
+              <Button
+                variant={"outlined"}
+                onClick={() => {
+                  setIsMapEnabled(false);
+                  setIsScannerEnabled(true);
+                }}>
+                Start Scanning
+              </Button>
+            </Box>
+          </OverlayView>
+        )}
       </GoogleMap>
     </div>
   );
