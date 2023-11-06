@@ -28,7 +28,7 @@ export function Scanner(props) {
             console.info(error);
           }
         }}
-        containerStyle={{ width: "100vw", height: "100vh" }}
+        containerStyle={{ width: "100vw", height: "100vh", flex: 1 }}
         facingMode={"environment"}
         onScan={() => {
           console.log("scan");
