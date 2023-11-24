@@ -1,0 +1,22 @@
+{
+  "levels": [
+    {
+      "marker": {
+        "address": "Dexter Lawn",
+        "pos": { "lat": 35.300547, "lng": -120.663688 }
+      },
+      "messages": ["dexter-1", "dexter-2"],
+      "modalTitle": "Welcome to Dexter Lawn",
+      "modalDescription": "I have hidden two QR codes somewhere. Search high, low, and everywhere in between to unlock your next location!"
+    },
+    {
+      "marker": {
+        "address": "Baker",
+        "pos": { "lat": 35.301116, "lng": -120.660121 }
+      },
+      "messages": ["baker-1"],
+      "modalTitle": "Welcome to Baker",
+      "modalDescription": "I have hidden another QR code somewhere. Try to find it!"
+    }
+  ]
+}

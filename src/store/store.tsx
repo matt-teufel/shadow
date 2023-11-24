@@ -8,19 +8,22 @@ export type Position = {
 
 type ExploreStoreState = {
   mapPos: Position;
-  currentLevel: number;
+  currentLevelIndex: number;
   isMapEnabled: boolean;
-  currentLevelMessages: Record<string, boolean>;
+  currentLevelMessages: string[];
+  scannedMessages: string[];
   isScannerEnabled: boolean;
+  remainingMessageCount: number;
+  gameOver: boolean;
 };
 
 type ExploreStoreActions = {
   setMapPosition: (pos: Position) => void;
-  setCurrentLevel: (level: number) => void;
+  setCurrentLevelIndex: (level: number) => void;
   setIsMapEnabled: (isEnabled: boolean) => void;
-  updateMessageStatus: (message: string) => void;
   updateGameState: () => void;
   setIsScannerEnabled: (isEnabled: boolean) => void;
+  addScannedMessage: (message: string) => void;
 };
 
 export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
@@ -30,26 +33,36 @@ export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
       set({ mapPos: pos });
       console.log("updating map pos");
     },
-    currentLevel: 0,
+    currentLevelIndex: 0,
     currentLevelMessages: GameConfig.levels[0].messages,
+    remainingMessageCount: GameConfig.levels[0].messages.length,
     updateGameState: () => {
-      Object.values(get().currentLevelMessages).forEach((value) => {
-        if (!value) {
-          return;
-        }
-      });
-      get().setCurrentLevel(get().currentLevel + 1);
+      if (get().currentLevelMessages.length !== get().scannedMessages.length) {
+        return;
+      }
+      console.log("incrementing game level");
+      const newLevel = get().currentLevelIndex + 1;
+      if (newLevel === GameConfig.levels.length) {
+        set({ gameOver: true });
+      } else {
+        get().setCurrentLevelIndex(newLevel);
+        set({ isMapEnabled: true, isScannerEnabled: false });
+      }
+
+      // set({
+      //   currentLevel: newLevel,
+      //   currentLevelMessages: GameConfig.levels[newLevel].messages,
+      //   isMapEnabled: true,
+      //   isScannerEnabled: false,
+      // });
     },
-    setCurrentLevel: (level: number) => {
+    setCurrentLevelIndex: (level: number) => {
       set({
-        currentLevel: level,
+        currentLevelIndex: level,
         currentLevelMessages: GameConfig.levels[level].messages,
+        scannedMessages: [],
+        remainingMessageCount: GameConfig.levels[level].messages.length,
       });
-    },
-    updateMessageStatus: (message: string) => {
-      const currentMessages = get().currentLevelMessages;
-      currentMessages[message] = true;
-      set({ currentLevelMessages: currentMessages });
     },
     isMapEnabled: false,
     setIsMapEnabled: (isEnabled: boolean) => {
@@ -58,6 +71,14 @@ export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
     isScannerEnabled: false,
     setIsScannerEnabled: (isEnabled: boolean) => {
       set({ isScannerEnabled: isEnabled });
+    },
+    gameOver: false,
+    scannedMessages: [],
+    addScannedMessage: (message: string) => {
+      const messages = get().scannedMessages;
+      messages.push(message);
+      const remainingCount = get().remainingMessageCount - 1;
+      set({ scannedMessages: messages, remainingMessageCount: remainingCount });
     },
   })
 );

@@ -28,10 +28,11 @@ function calculateHaversineDistance(pos1: Position, pos2: Position): number {
   return distance;
 }
 
-export function arePositionsWithin50Meters(
+export function arePositionsWithinDistance(
   pos1: Position,
-  pos2: Position
+  pos2: Position,
+  dis: number
 ): boolean {
   const distance = calculateHaversineDistance(pos1, pos2);
-  return distance <= 20;
+  return distance <= dis;
 }
