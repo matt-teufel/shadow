@@ -32,6 +32,7 @@ export function Scanner(props) {
               ) {
                 addScannedMessage(result.text);
                 setShowCheckmark(true);
+                navigator.vibrate(200);
               }
             }
           }
@@ -47,7 +48,7 @@ export function Scanner(props) {
           console.log("err");
         }}
         containerStyle={{
-          width: "70vh",
+          width: "65vh",
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
