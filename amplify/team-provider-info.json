@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {}
+  },
+  "shadow": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shadowcasters-shadow-164959-authRole",
+      "UnauthRoleArn": "arn:aws:iam::524840729612:role/amplify-shadowcasters-shadow-164959-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::524840729612:role/amplify-shadowcasters-shadow-164959-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-shadowcasters-shadow-164959-deployment",
+      "UnauthRoleName": "amplify-shadowcasters-shadow-164959-unauthRole",
+      "StackName": "amplify-shadowcasters-shadow-164959",
+      "StackId": "arn:aws:cloudformation:us-west-2:524840729612:stack/amplify-shadowcasters-shadow-164959/8c8ac750-9951-11ee-a19b-02a3ba6f4b4b",
+      "AmplifyAppId": "dd079rw07ynl"
+    },
+    "categories": {
+      "auth": {
+        "shadowcasters881c98a0": {}
+      }
+    }
+  }
+}

@@ -6,7 +6,14 @@ import { useExploreStore } from "./store/store";
 import { Scanner } from "./features/Scanner/Scanner";
 import { GameOver } from "./features/gameover/GameOver";
 import { QrReader } from "react-qr-reader";
-function App() {
+import { Amplify } from "aws-amplify";
+import type { WithAuthenticatorProps } from "@aws-amplify/ui-react";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
+import config from "./amplifyconfiguration.json";
+Amplify.configure(config);
+
+export function App({ signOut, user }: WithAuthenticatorProps) {
   const isMapEnabled = useExploreStore((state) => state.isMapEnabled);
   const setIsMapEnabled = useExploreStore((state) => state.setIsMapEnabled);
   const isScannerEnabled = useExploreStore((state) => state.isScannerEnabled);
@@ -15,7 +22,8 @@ function App() {
   );
   const gameOver = useExploreStore((state) => state.gameOver);
   useEffect(() => {
-    setIsScannerEnabled(true);
+    // setIsScannerEnabled(true);
+    setIsMapEnabled(true);
   }, []);
   return (
     <div className="App">
@@ -36,4 +44,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App);
