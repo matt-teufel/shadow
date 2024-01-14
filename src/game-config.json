@@ -2,29 +2,20 @@
   "levels": [
     {
       "marker": {
-        "address": "Street 1",
-        "pos": { "lat": 35.143242, "lng": -120.639705 }
+        "address": "Dexter Lawn",
+        "pos": { "lat": 35.300547, "lng": -120.663688 }
       },
-      "messages": ["a-1", "a-2"],
-      "modalTitle": "Welcome to the first street on the pin",
+      "messages": ["dexter-1", "dexter-2"],
+      "modalTitle": "Welcome to Dexter Lawn",
       "modalDescription": "I have hidden two QR codes somewhere. Search high, low, and everywhere in between to unlock your next location!"
     },
     {
       "marker": {
-        "address": "Tunnel 1",
-        "pos": { "lat": 35.143497, "lng": -120.640502 }
+        "address": "Baker",
+        "pos": { "lat": 35.301116, "lng": -120.660121 }
       },
-      "messages": ["tunnel-1"],
-      "modalTitle": "Welcome to Tunnel",
-      "modalDescription": "I have hidden another QR code somewhere. Try to find it!"
-    },
-    {
-      "marker": {
-        "address": "Tunnel 2",
-        "pos": { "lat": 35.143163, "lng": -120.641021 }
-      },
-      "messages": ["tunnel-2"],
-      "modalTitle": "Welcome to Tunnel 2",
+      "messages": ["baker-1"],
+      "modalTitle": "Welcome to Baker",
       "modalDescription": "I have hidden another QR code somewhere. Try to find it!"
     }
   ]

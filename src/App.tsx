@@ -5,7 +5,6 @@ import WelcomeMessage from "./features/WelcomeMessage";
 import { useExploreStore } from "./store/store";
 import { Scanner } from "./features/Scanner/Scanner";
 import { GameOver } from "./features/gameover/GameOver";
-import { QrReader } from "react-qr-reader";
 import { Amplify } from "aws-amplify";
 import type { WithAuthenticatorProps } from "@aws-amplify/ui-react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
@@ -17,13 +16,11 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
   const isMapEnabled = useExploreStore((state) => state.isMapEnabled);
   const setIsMapEnabled = useExploreStore((state) => state.setIsMapEnabled);
   const isScannerEnabled = useExploreStore((state) => state.isScannerEnabled);
-  const setIsScannerEnabled = useExploreStore(
-    (state) => state.setIsScannerEnabled
-  );
+  const initializeGame = useExploreStore((state) => state.initializeGame);
   const gameOver = useExploreStore((state) => state.gameOver);
   useEffect(() => {
-    // setIsScannerEnabled(true);
     setIsMapEnabled(true);
+    initializeGame();
   }, []);
   return (
     <div className="App">
@@ -36,6 +33,18 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
           )}
           <Scanner />
           <Map />
+          {/* <button
+            onClick={() => {
+              initializeGame();
+            }}>
+            fetch game
+          </button>
+          <button
+            onClick={() => {
+              updateGameState();
+            }}>
+            update game
+          </button> */}
         </>
       ) : (
         <GameOver />
@@ -44,4 +53,4 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
   );
 }
 
-export default withAuthenticator(App);
+export default withAuthenticator(App, { signUpAttributes: ["email"] });

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import GameConfig from "../game-config.json";
+import { fetchState, updateState } from "./service";
+import { AuthUser, getCurrentUser } from "aws-amplify/auth";
 
 export type Position = {
   lat: number;
@@ -15,6 +17,7 @@ type ExploreStoreState = {
   isScannerEnabled: boolean;
   remainingMessageCount: number;
   gameOver: boolean;
+  user: AuthUser | null;
 };
 
 type ExploreStoreActions = {
@@ -24,6 +27,7 @@ type ExploreStoreActions = {
   updateGameState: () => void;
   setIsScannerEnabled: (isEnabled: boolean) => void;
   addScannedMessage: (message: string) => void;
+  initializeGame: () => void;
 };
 
 export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
@@ -33,6 +37,7 @@ export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
       set({ mapPos: pos });
       console.log("updating map pos");
     },
+    user: null,
     currentLevelIndex: 0,
     currentLevelMessages: GameConfig.levels[0].messages,
     remainingMessageCount: GameConfig.levels[0].messages.length,
@@ -40,21 +45,17 @@ export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
       if (get().currentLevelMessages.length !== get().scannedMessages.length) {
         return;
       }
-      console.log("incrementing game level");
       const newLevel = get().currentLevelIndex + 1;
-      if (newLevel === GameConfig.levels.length) {
+      const username = get().user?.username;
+      if (username) {
+        updateState(username, newLevel, []);
+      }
+      if (newLevel >= GameConfig.levels.length) {
         set({ gameOver: true });
       } else {
         get().setCurrentLevelIndex(newLevel);
         set({ isMapEnabled: true, isScannerEnabled: false });
       }
-
-      // set({
-      //   currentLevel: newLevel,
-      //   currentLevelMessages: GameConfig.levels[newLevel].messages,
-      //   isMapEnabled: true,
-      //   isScannerEnabled: false,
-      // });
     },
     setCurrentLevelIndex: (level: number) => {
       set({
@@ -79,6 +80,31 @@ export const useExploreStore = create<ExploreStoreActions & ExploreStoreState>(
       messages.push(message);
       const remainingCount = get().remainingMessageCount - 1;
       set({ scannedMessages: messages, remainingMessageCount: remainingCount });
+      const username = get().user?.username;
+      if (username) {
+        updateState(username, get().currentLevelIndex, messages);
+      }
+    },
+    initializeGame: async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        const state = await fetchState(user?.username);
+        if (state) {
+          if (state.level >= GameConfig.levels.length) {
+            set({ gameOver: true });
+          } else {
+            set({
+              user: user,
+              scannedMessages: state.messages,
+              currentLevelIndex: state.level,
+              currentLevelMessages: GameConfig.levels[state.level].messages,
+              remainingMessageCount:
+                GameConfig.levels[state.level].messages.length -
+                state.messages.length,
+            });
+          }
+        }
+      }
     },
   })
 );

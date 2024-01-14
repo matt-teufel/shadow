@@ -1,0 +1,13 @@
+{
+  "httpMethod": "POST",
+  "path": "/state",
+  "queryStringParameters": {
+    "uid": "87f8b8f8-bc0a-46e1-af59-e11836e29e1d",
+    "level": "1",
+    "messages": ["message-1"]
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"msg\":\"Hello from the event.json body\"}"
+}

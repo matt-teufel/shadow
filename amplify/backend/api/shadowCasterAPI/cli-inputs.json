@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "paths": {
+    "/state": {
+      "name": "/state",
+      "lambdaFunction": "shadowCasterLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ]
+      }
+    }
+  }
+}

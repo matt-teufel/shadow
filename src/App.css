@@ -49,3 +49,7 @@
   height: 100vh;
   color: whitesmoke;
 }
+
+iframe#webpack-dev-server-client-overlay {
+  display: none !important;
+}

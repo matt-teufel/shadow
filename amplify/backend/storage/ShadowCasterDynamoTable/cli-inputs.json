@@ -1,0 +1,10 @@
+{
+  "resourceName": "ShadowCasterDynamoTable",
+  "tableName": "ShadowCasterDynamoTable",
+  "partitionKey": {
+    "fieldName": "uid",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

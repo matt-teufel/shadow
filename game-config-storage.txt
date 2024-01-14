@@ -20,3 +20,41 @@
     }
   ]
 }
+
+
+
+
+
+
+
+{
+  "levels": [
+    {
+      "marker": {
+        "address": "Street 1",
+        "pos": { "lat": 35.143242, "lng": -120.639705 }
+      },
+      "messages": ["a-1", "a-2"],
+      "modalTitle": "Welcome to the first street on the pin",
+      "modalDescription": "I have hidden two QR codes somewhere. Search high, low, and everywhere in between to unlock your next location!"
+    },
+    {
+      "marker": {
+        "address": "Tunnel 1",
+        "pos": { "lat": 35.143497, "lng": -120.640502 }
+      },
+      "messages": ["tunnel-1"],
+      "modalTitle": "Welcome to Tunnel",
+      "modalDescription": "I have hidden another QR code somewhere. Try to find it!"
+    },
+    {
+      "marker": {
+        "address": "Tunnel 2",
+        "pos": { "lat": 35.143163, "lng": -120.641021 }
+      },
+      "messages": ["tunnel-2"],
+      "modalTitle": "Welcome to Tunnel 2",
+      "modalDescription": "I have hidden another QR code somewhere. Try to find it!"
+    }
+  ]
+}
