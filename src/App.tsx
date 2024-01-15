@@ -21,7 +21,7 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
   useEffect(() => {
     setIsMapEnabled(true);
     initializeGame();
-  }, []);
+  }, [setIsMapEnabled, initializeGame]);
   return (
     <div className="App">
       {!gameOver ? (
@@ -33,18 +33,6 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
           )}
           <Scanner />
           <Map />
-          {/* <button
-            onClick={() => {
-              initializeGame();
-            }}>
-            fetch game
-          </button>
-          <button
-            onClick={() => {
-              updateGameState();
-            }}>
-            update game
-          </button> */}
         </>
       ) : (
         <GameOver />

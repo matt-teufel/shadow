@@ -2,13 +2,10 @@ import {
   GoogleMap,
   MarkerF,
   useJsApiLoader,
-  InfoBox,
-  OverlayViewF,
   OverlayView,
 } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useState } from "react";
 import "./Map.module.css";
-import shadowBox from "./shadowBox_20x22.png";
 import userIcon from "./street-view (2).png";
 import { useExploreStore, Position } from "../../store/store";
 import GameConfig from "../../game-config.json";
@@ -41,12 +38,12 @@ const getPixelPositionOffset = (width: number, height: number) => ({
 export function Map() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDKqJC4dkD_xkdDVOpI38m3nJr3uuRXq7Q",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "",
   });
 
   const mapOptions = {
     disableDefaultUI: true,
-    mapId: "c2191a630a735aa3",
+    mapId: process.env.REACT_APP_GOOGLE_MAPS_MAP_ID || "",
   };
 
   const [locationLoaded, setLocationLoaded] = useState(false);
@@ -71,7 +68,6 @@ export function Map() {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         } as Position;
-        console.log(newPos);
         if (newPos.lat !== mapPos.lat || newPos.lng !== mapPos.lng) {
           setMapPosition(newPos);
           setLocationLoaded(true);
